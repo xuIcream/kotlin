@@ -1,6 +1,7 @@
 package base.kotlin
 
-class Person(val name: String) {
+
+open class Person(val name: String) { // primary constructor
     var age: Int = 0
         set(value) {
             println("set age ")
@@ -10,6 +11,13 @@ class Person(val name: String) {
             println("get age")
             return field
         }
+}
+
+//默认为final
+class Student(name: String): Person(name) { // primary constructor
+
+    constructor(name: String, age: Int):this(name) {
+    }
 }
 
 enum class Color {

@@ -1,0 +1,10 @@
+# Created by .ignore support plugin (hsz.mobi)
+.DS_Store
+Thumbs.db
+db.json
+*.log
+*iml
+gen
+out
+.idea
+*build/

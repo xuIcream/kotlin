@@ -11,9 +11,16 @@ fun main(args: Array<String>) {
     person.age
     println(getColor(Color.RED))
 
+    var b: Long = 2
     for (c in 'A'..'F') {
         println(c)
     }
+    val list = listOf(1, 2, 3)
+
+    joinToString(list, separator = " ", prefix = " ", postfix = ".")
+
+    val str = "hello world!"
+    println(str.lastChar())
 
 }
 
