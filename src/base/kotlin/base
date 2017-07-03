@@ -1,0 +1,11 @@
+var
+val
+var a: Int = 0
+var a = 0
+
+
+fun max(a: Int, b: Int): Int {
+    return if (a > b) a else b
+}
+
+fun max(a: Int, b: Int) = if (a > b) a else b
