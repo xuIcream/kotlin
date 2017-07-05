@@ -1,27 +1,40 @@
 package base.kotlin
 
+//val -----> final
+//var -----> not final
+val aa:Int = 42
+val bb = 42
 
-open class Person(val name: String) { // primary constructor
-    var age: Int = 0
-        set(value) {
-            println("set age ")
-            field = value
-        }
-        get() {
-            println("get age")
-            return field
-        }
+//string templates
+val name = "Kotlin"
+
+fun maxA(a: Int, b: Int): Int {
+    return if (a > b) a else b
 }
 
-//默认为final
-class Student(name: String): Person(name) { // primary constructor
-
-    constructor(name: String, age: Int):this(name) {
-    }
-}
+fun maxB(a: Int, b: Int): Int = if (a > b) a else b
 
 enum class Color {
     RED,
     BLUE,
     YELLOW
+}
+
+fun getColor(color: Color) =
+        when (color) {
+            Color.RED -> "red"
+            Color.BLUE -> "blue"
+            Color.YELLOW -> "yellow"
+        }
+
+fun main(args: Array<String>) {
+    println("Hello, world!")
+    println("Hello, $name!")
+    println(getColor(Color.BLUE))
+
+    val list = arrayListOf("10", "11", "1001")
+    for ((index, element) in list.withIndex()) {
+        println("$index: $element")
+    }
+
 }

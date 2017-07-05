@@ -5,28 +5,47 @@ fun printHello(w: String) {
 }
 
 fun main(args: Array<String>) {
-    printHello("world")
-    val person = Person("xx")
-    person.age = 4
-    person.age
-    println(getColor(Color.RED))
 
-    var b: Long = 2
     for (c in 'A'..'F') {
         println(c)
     }
-    val list = listOf(1, 2, 3)
+    val list = listOf(2, 1, 3)
+    list.sortedBy { it }
 
     joinToString(list, separator = " ", prefix = " ", postfix = ".")
 
     val str = "hello world!"
     println(str.lastChar())
 
+    val people = listOf(Person("Alice", 29), Person("Bob", 31))
+    people.maxBy { p: Person -> p.age }
+    people.maxBy { it.age }
+    people.forEach { print(it) }
+
+
+    val aa = 3
+    val bb = 4
+    max(aa, bb)
+    val cc: Int? = 5
+    //max(aa, cc)
+
+    var x: String = "aa"
+    val y: String? = x
+    //val z: String = y
+
+    remove(0)
+
 }
 
-fun getColor(color: Color) =
-        when (color) {
-            Color.RED -> "red"
-            Color.BLUE -> "blue"
-            Color.YELLOW -> "yellow"
-        }
+
+fun max(a: Int, b: Int): Int {
+    return if (a > b) a else b
+}
+
+@Deprecated("Use removeAt(index) instead.", ReplaceWith("removeAt(index)"))
+fun remove(index: Int) {
+
+}
+
+fun removeAt(index: Int) {
+}

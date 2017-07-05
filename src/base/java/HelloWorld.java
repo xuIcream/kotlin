@@ -1,8 +1,11 @@
 package base.java;
 
 import base.kotlin.Person;
+import base.kotlin.StringFunctions;
 
-import static base.kotlin.FunctionKt.lastChar;
+import java.util.ArrayList;
+import java.util.Collections;
+
 
 public class HelloWorld {
 
@@ -12,8 +15,28 @@ public class HelloWorld {
         person.getAge();
 
 
-        char c = lastChar("Java");
+        /**
+         * java  kotlin
+         */
+        char c = StringFunctions.lastChar("Java");
 
+
+        /*String[] strs = new String[] {"aa", "bb"};
+        Object[] objects = strs;
+        objects[0] = new Object();
+
+
+        List<String> strList = new ArrayList<>();
+        List<Object> objList = new ArrayList<>();
+        objList.addAll(strList);
+        // boolean addAll(Collection<? extends E> var1)
+
+        objList = strList;
+        objList.add(5);
+        String str = strList.get(0);*//*
+*/
+
+        Collections.copy(new ArrayList<Object>(), new ArrayList<String>());
     }
 
 

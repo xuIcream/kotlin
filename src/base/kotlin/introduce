@@ -1,0 +1,358 @@
+###介绍
+**JetBrains**开发的基于JVM的**现代化**语言, 和Java一样编译成class 字节码
+Android IDE,就是基于Intellij
+[Kotlin 现在是 Android 的官方语言！Kotlin 因其简洁性和强大的功能早已深受众多 Android 开发者的热爱](https://developer.android.google.cn/index.html)
+![Alt text](./kotlin build.png)
+
+
+###优点
+- 精简     (如data class, 参数默认值 )
+- 安全     (Int? 空指针)
+- 函数式
+- 实用的(jetBrain 开发 本来就是开发ide的)
+- 开源
+
+
+###语法
+
+####基本语法
+变量声明
+```kotlin
+//val -----> final
+//var -----> not final
+val aa:Int = 42
+val bb = 42
+val person = Person
+```
+
+String 模版
+```kotlin
+val name = "Kotlin"
+println("Hello, $name!")
+```
+
+函数
+```kotlin
+fun f(): Unit {
+}
+unit 可以省略
+fun f(): {
+}
+
+fun max(a: Int, b: Int): Int {
+    return if (a > b) a else b
+}
+
+when  if 都是表达式 有返回值
+赋值表达式 也可以省略
+fun max(a: Int, b: Int) = if (a > b) a else b
+
+fun <T> joinToString(collection: Collection<T>,
+                     separator: String,
+                     prefix: String,
+                     postfix: String): String {}
+默认参数
+joinToString(list, separator = " ", prefix = " ", postfix = ".")
+joinToString(list)
+
+//扩展方法
+fun String.lastChar(): Char = this[this.length - 1]
+等价于
+public static final char lastChar(@NotNull String $receiver) {
+  return $receiver.charAt($receiver.length() - 1);
+}
+// extend Property
+var StringBuilder.lastChar: Char
+    get() = get(length - 1)
+    set(value: Char) {
+        this.setCharAt(length - 1, value)
+    }
+
+
+fun SaveUser() {
+    fun inner() {
+
+    }
+    inner()
+}
+```
+
+####类
+所有类的超类
+Object   // Java代码
+Any    // Kotlin代码
+
+没有原始数据类型，都是对象的话效率低？ 不会
+最终编译成class的时候 该是int 就是int
+该是 Integer还是Integer 如在Collection
+
+类默认为 public  final
+
+```koltin
+interface Interface {
+}
+
+默认为final
+open class Animal(name: String)
+class Person(name: String, surname: String) : Animal(name)
+
+data class 自动生成 hashcode equal copy 方法
+object 单例
+object SingleInstance { }
+
+data class Person(val name: String) { // 主构造函数
+    companion object { // 工厂方法， 静态变量
+        fun fromJSON(jsonText: String): Person = Person(jsonText)
+    }
+    var age: Int = 0
+        set(value) {
+            println("set age ")
+            field = value
+        }
+        get() {
+            println("get age")
+            return field
+        }
+
+    constructor(name: String, age: Int):this(name) {
+        this.age = age
+    }
+}
+属性 name age
+backing field field
+
+内部类 静态内部类
+class Outer {
+    inner class InnerA {
+        fun getOuterReference(): Outer = this@Outer
+    }
+    静态内部类
+    class InnerB {
+    }
+}
+密封(sealed)类。你使用sealed修饰符标记一个超类。
+这限制了创建子类的可能性。所有的直接子类都必须被嵌套在超类中:
+sealed class Expr {
+    class Num(val value: Int) : Expr()
+    class Sum(val left: Expr, val right: Expr) : Expr()
+}
+密封类 when 没有default 分支
+fun eval(e: Expr): Int =
+    when (e) {
+        is Expr.Num -> e.value
+        is Expr.Sum -> eval(e.right) + eval(e.left)
+    }
+
+if (num instanceof Double) {  }  // Java代码
+if (num is Double) {  }  // Kotlin代码
+
+(Double)num    // Java代码
+
+num as Double  // Kotlin代码
+
+val p = Point(10, 20)
+val (x, y) = p --------->  a = p.component1()  b = p.component2()
+
+by 修饰符  lazy 延迟加载
+class Person(val name: String) {
+    val emails by lazy { loadEmails(this) }
+}
+```
+
+修饰符
+|    Modifier       |  Corresponding member             |          Comments                 |
+|     :--:          |      :--:                         |           :--:                    |
+|     final         |Can’t be overridden                | Used by default for class members |
+|     open          |Can be overridden                  |Should be specified explicitly     |
+|     abstract      | Must be overridden                |
+|     override      |Overrides a member in a superclass |Overridden member is open by default, if not marked final|
+
+
+| Modifier          |    Class member            |   Top-level declaration   |
+| :--:              |      :--:                  |                :--:       |
+| internal          |   Visible everywhere       |    Visible in a everywhere|
+| internal          |   Visible in a module      |    Visible in a module    |
+|protected          |   Visible in subclasses    |                           |
+|private            |   Visible in a class       |    Visible in a file      |
+
+
+#### lambda
+```kotlin
+{ 参数 -> body }
+{ x: Int, y: Int -> x + y }
+
+val sum = { x: Int, y: Int -> x + y }
+val sum: (Int, Int) -> Int = { x, y -> x + y }
+
+fun twoAndThree(operation: (Int, Int) -> Int) {
+	val result = operation(2, 3)
+}
+twoAndThree { a, b -> a + b }
+
+val people = listOf(Person("Alice", 29), Person("Bob", 31))
+
+people.maxBy { p: Person -> p.age }
+people.maxBy { p -> p.age }
+people.maxBy { it.age }
+
+people.forEach { print(it) }
+forEach 方法
+public inline fun <T> Iterable<T>.forEach(action: (T) -> Unit): Unit {
+    for (element in this) action(element)
+}
+
+inline 所以 people.forEach { print(it) } 在编译时会替换为
+for (element in people) print(element)
+
+内联的lambda表达式确保没有新的对象被创建，影响效率
+
+/* Java */
+void postponeComputation(int delay, Runnable computation);
+
+koltin 中调用
+postponeComputation(1000) { println(42) }
+```
+
+#### null
+```kotlin
+Type?   = Type or null
+String? = String or　null
+
+String  和 String? 不是同一个类型
+
+val s: String? = null  可能为null
+val s2: String = ""    不可能为null
+
+fun strLenSafe(s: String?) = s.length()    编译不通过可能为空   if (s != null) s.length else 0 （正确）
+val x: String? = null   var y: String = x  类型不匹配
+
+Safe call operator
+？.    foo?.bar()  当foo != null 执行 foo.bar  当foo == null null
+
+fun printAllCaps(s: String?) {
+		val allCaps: String? = s?.toUpperCase()
+		println(allCaps)
+}
+> printAllCaps("abc")
+ABC
+> printAllCaps(null)
+null
+
+Elvis operator: ?:
+?:    foo ？: bar  当foo != null 等于 foo  当foo == null bar
+fun strLenSafe(s: String?): Int = s?.length ?: 0
+> println(strLenSafe("abc"))
+3
+> println(strLenSafe(null))
+0
+
+Not-null assertions: !!
+!!   foo!!     == null  npe
+
+var email: String? = "xx@example.com"
+fun sendEmailTo(email: String) {
+}
+
+let
+if (email != null) sendEmailTo(email)    ----->  email?.let { sendEmailTo(it) }
+
+泛型方法 检查 null
+fun <T> printHashCode(t: T) {
+     println(t?.hashCode())
+}
+```
+
+#### 集合
+标准的Java集合类
+每个Kotlin集合都是相应Java集合的一个实例
+
+修饰符
+| ollection  type    |    Read-only     |           Mutable                    |
+| :--:               |      :--:        |                :--:                  |
+| List               |   listOf()       |     arrayListOf()                    |
+| Set                |   hashSetOf()    |     linkedSetOf(), sortedSetOf()     |
+| Map                |   mapOf()        |  hashMapOf, linkedMapOf(), sortedMapOf() |
+
+![Alt text](./collection.png)
+![Alt text](./aaa.png)
+```kotlin
+val list = listOf(1, 7, 53)
+val map = mapOf(1 to "one", 7 to "seven", 53 to "fifty-three")
+```
+
+####运算符重载
+```kotlin
+
+plus  minus  times rangeTo  contains
+ +     -
+ +
+data class Person(val age: Int) {
+    operator fun plus(other: Person): Person {
+        return Person（age + other.age）
+    }
+}
+
+Person("xx") + Person("vvv")
+a..b        ---->  a.rangeTo(b)
+a in b      ---->  a.contains(b)
+
+
+操作符 === 和 !==	用来做身份检查(它们分别是Java中的 ==	和 	!=	),并且它们不能被重载
+==  equal
+a == b    ----> a?equal(b) ?: b == null
+```
+
+
+####泛型
+
+运行时擦除
+```java
+List<String> 在运行是为 List
+
+数组是协变的
+//java
+String[] strs = new String[] {"aa", "bb"};
+Object[] objects = strs;
+objects[0] = new Object();
+
+List<String> strList = new ArrayList<>();
+List<Object> objList = new ArrayList<>();
+objList = strList; 不能通过编译 不是协变的
+objList.add(0, new Object()); // 对于objList 来说没问题
+strlist.get(0) 就会出错
+
+最主要的就是 一个list 传递给另外一个list 这个list是要干嘛
+如果是消费 extend  out    传递更具体的
+如果是生产 super   in     传递更抽象的
+
+
+// java Collections
+public static <T> void copy(List<? super T> dest, List<? extends T> src) {
+    for (int i=0; i<srcSize; i++) {
+		 dest.set(i, src.get(i));
+    }
+ }
+
+// kotlin
+fun <T> copy(dest: MutableList<in T>, src: List<out T>) {
+    for (i in 0..srcSize - 1) {
+		dest[i] = src[i]
+    }
+}
+```
+消费  out
+生产  in
+
+```kotlin
+interface List<out T> : Collection<T>{
+    operator fun get(index: Int): T
+    fun add(element: T): Boolean {
+    //这里可以传T的 子类 因为
+	}
+}
+```
+
+
+idea
+java bytecode decompiler
+kotlin bytecode view
