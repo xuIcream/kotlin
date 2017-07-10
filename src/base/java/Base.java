@@ -1,8 +1,6 @@
 package base.java;
 
-public class Base {
-
-
+class Base {
 }
 
 class Person {

@@ -12,20 +12,25 @@ annotation class JsonExclude
 annotation class JsonName(val name: String)
 
 
+/**
+ * at this time it does not provide a comprehensive replacement for the Java reflection API
+ * KClass, KCallable, KFunction, KProperty
+ *
+ */
+
 fun main(args: Array<String>) {
-    val person = Person("xxxx", 12)
-
-
-    val kClass = person.javaClass.kotlin
+    val kClass = Person::class
     kClass.memberProperties.forEach { println(it.name) }
 
-
+    val person = Person("xxxx", 12)
     val memberProperty = Person::age
     memberProperty.invoke(person)
     println(serialize(person))
-
+    val kFunction = ::foo
+    kFunction.call(43)
 }
 
+fun foo(x: Int) = println(x)
 
 fun serialize(obj: Any): String = buildString { serializeObject(obj) }
 
