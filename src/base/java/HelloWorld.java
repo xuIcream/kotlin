@@ -8,9 +8,17 @@ import java.util.Collections;
 
 
 public class HelloWorld {
+    private Singleton singleton = null;
+
+    public Singleton getSingleton() {
+        return singleton;
+    }
+
+    public void setSingleton(Singleton singleton) {
+        this.singleton = singleton;
+    }
 
     public static void main(String... args) {
-        System.out.println("vvvvvv");
         base.kotlin.Person person = new Person("xx");
         person.getAge();
 
@@ -34,9 +42,18 @@ public class HelloWorld {
         objList = strList;
         objList.add(5);
         String str = strList.get(0);*//*
+        Collections.copy(new ArrayList<Object>(), new ArrayList<String>());
 */
 
-        Collections.copy(new ArrayList<Object>(), new ArrayList<String>());
+        /*try {
+            Class<?> aClass = Class.forName("base.java.Singleton");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }*/
+        HelloWorld helloWorld = new HelloWorld();
+        helloWorld.getSingleton();
+        //System.out.println(Singleton.foo);
+        //System.out.println(LazySingleton.foo);
     }
 
 
